@@ -8,25 +8,7 @@ function init() {
   var win, basePath, socketInfo, data;
   var filesMap = {};
 
-  /*
-  LOG PERMISSION WARNINGS
-  use to test manifest permissions changes
-  DO NOT publish if new warnings are triggered. Prompt on existing
-  installations would likely be a major issue.
-
-  Current permission warnings are:
-  -"Exchange data with any device on the local network or internet",
-  -"Read folders that you open in the application"
-
-  Should be commented out in production application.
-  */
-  /*chrome.management.getPermissionWarningsByManifest(
-    JSON.stringify(chrome.runtime.getManifest()),
-    function(warning){
-      console.log("PERMISSION WARNIINGS",warning);
-    }
-  );*/
-
+ 
   chrome.storage.local.get(null,function(data){
     if(('url' in data)){
       //setup has been completed
@@ -63,53 +45,53 @@ function init() {
     }
   });
 
-  chrome.runtime.onMessage.addListener(function(request,sender,sendResponse){
-    if(request == "demo")
-     openWindow("windows/demo.html");
-    else if(request == "reload"){
-      chrome.runtime.getPlatformInfo(function(p){
-        if(p.os == "cros"){
-          //we're on ChromeOS, so `reload()` will always work
-          chrome.runtime.reload();
-        }else{
-          //we're OSX/Win/*nix so `reload()` may not work if Chrome is not
-          // running the background. Simply close all windows and reset.
-          if(directoryServer) directoryServer.stop();
-          if(adminServer) adminServer.stop();
-          var w = chrome.app.window.getAll();
-          for(var i = 0; i < w.length; i++){
-            w[i].close();
-          }
-          init();
-        }
-      });
-    }
-  });
+  // chrome.runtime.onMessage.addListener(function(request,sender,sendResponse){
+  //   if(request == "demo")
+  //    openWindow("windows/demo.html");
+  //   else if(request == "reload"){
+  //     chrome.runtime.getPlatformInfo(function(p){
+  //       if(p.os == "cros"){
+  //         //we're on ChromeOS, so `reload()` will always work
+  //         chrome.runtime.reload();
+  //       }else{
+  //         //we're OSX/Win/*nix so `reload()` may not work if Chrome is not
+  //         // running the background. Simply close all windows and reset.
+  //         if(directoryServer) directoryServer.stop();
+  //         if(adminServer) adminServer.stop();
+  //         var w = chrome.app.window.getAll();
+  //         for(var i = 0; i < w.length; i++){
+  //           w[i].close();
+  //         }
+  //         init();
+  //       }
+  //     });
+  //   }
+  // });
 
-  function openWindow(path){
-    if(win) win.close();
-    chrome.system.display.getInfo(function(d){
-      chrome.app.window.create(path, {
-        'frame': 'none',
-        'id': 'browser',
-        'state': 'fullscreen',
-        'bounds':{
-           'left':0,
-           'top':0,
-           'width':d[0].bounds.width,
-           'height':d[0].bounds.height
-        }
-      },function(w){
-        win = w;
-        if(win){
-          win.fullscreen();
-          setTimeout(function(){
-            if(win) win.fullscreen();
-          },1000);
-        }
-      });
-    });
-  }
+  // function openWindow(path){
+  //   if(win) win.close();
+  //   chrome.system.display.getInfo(function(d){
+  //     chrome.app.window.create(path, {
+  //       'frame': 'none',
+  //       'id': 'browser',
+  //       'state': 'fullscreen',
+  //       'bounds':{
+  //          'left':0,
+  //          'top':0,
+  //          'width':d[0].bounds.width,
+  //          'height':d[0].bounds.height
+  //       }
+  //     },function(w){
+  //       win = w;
+  //       if(win){
+  //         win.fullscreen();
+  //         setTimeout(function(){
+  //           if(win) win.fullscreen();
+  //         },1000);
+  //       }
+  //     });
+  //   });
+  // }
 
   function startWebserverDirectoryEntry(host,port,entry) {
     directoryServer = new WSC.WebApplication({host:host,

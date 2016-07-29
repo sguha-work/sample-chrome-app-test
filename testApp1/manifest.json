@@ -8,5 +8,5 @@
       "scripts": ["script.js"]
     }
   },
-  "icons": { "16": "", "128": "" }
+  "icons": { "16": "icon.png", "128": "icon.png" }
 }
