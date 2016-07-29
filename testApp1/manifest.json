@@ -1,12 +1,12 @@
 {
-  "name": "Hello World!",
-  "description": "My first Chrome App.",
+  "name": "testApp1",
+  "description": "Simple Test Application",
   "version": "0.1",
   "manifest_version": 2,
   "app": {
     "background": {
-      "scripts": ["background.js"]
+      "scripts": ["script.js"]
     }
   },
-  "icons": { "16": "calculator-16.png", "128": "calculator-128.png" }
+  "icons": { "16": "icon.jpg", "128": "icon.jpg" }
 }
