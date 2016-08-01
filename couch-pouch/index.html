@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Simple HTTP Webserver</title>
+  <script type="text/javascript" src="pouchdb.min.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+</head>
+
+<body>
+  <div class="hero-unit">
+    <div>
+      <p>Enter data for pouch DB</p>
+      <input type="text" id="txt_data"/><button id="btn_submit">Save</button>
+    </div>
+    <p>Status of Application </p>
+    <p id="txt_status"></p>
+    <p>Action taken</p>
+    <p id="txt_actionTaken"></p>
+    <p>Local pouch db data</p>
+    <div id="txt_pouchData"></div>
+    <p>Couch db data</p>
+    <div id="txt_couchData"></div>
+  </div>
+  <pre id="logger"></pre>
+</body>
+
+</html>
