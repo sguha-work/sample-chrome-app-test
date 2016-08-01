@@ -1,24 +1,47 @@
 var CPSync = (function (dataBaseName) {
     this.storeToPouch;
-    this.storeToCouch;
     this.getFromPouch;
-    this.getFromCouch;
-    var dataBase;
+    var dataBase,
+        checkOnline,
+        syncWithCouch,
+        couchDBURL,
+        couchDBName;
 
-    (function (dataBaseName) {
-        console.log(dataBaseName);
-        dataBase = new PouchDB(dataBaseName);
-    })(dataBaseName);
+    couchDBURL = "http://127.0.0.1:5984/";
+    couchDBName = "temp-data-base1";    
 
+    /**
+     * @description - This function checks the browser status online or not
+     */
+    checkOnline = (function () {
+        return navigator.onLine;
+    });
+
+    syncWithCouch = (function () {
+        PouchDB.sync(dataBaseName, couchDBURL+couchDBName , {
+            live: true,
+            retry: true
+        });
+    });
+
+    /**
+     * @description - This function store a data object to PouchDB
+     * @params data {Object} - The data which is going to be inserted
+     */
     this.storeToPouch = (function (data) {
         dataBase.put(data);
         console.log("Data stored to pouch DB");
+        if (checkOnline()) {
+            syncWithCouch();
+        }
     });
 
-    this.storeToCouch = (function () {
 
-    });
-
+    /**
+     * @description - This function fetch data from PouchDB
+     * @params documentName {String} - The document which will be fetched may accept ""
+     * @params callBack {Function} - The method which will be called after the fetch data is done
+     */
     this.getFromPouch = (function (documentName, callBack) {
         if (typeof documentName != "undefined" && documentName != null && documentName != "") {
             dataBase.get(documentName).then(function (data) {
@@ -42,10 +65,12 @@ var CPSync = (function (dataBaseName) {
         }
     });
 
-    this.getFromCouch = (function () {
-
-    });
-
+    (function () {
+        dataBase = new PouchDB(dataBaseName);
+        if (checkOnline()) {
+           PouchDB.sync(dataBaseName, couchDBURL+couchDBName);
+        }
+    })();
 
 });
 
